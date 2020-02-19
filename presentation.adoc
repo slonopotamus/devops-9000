@@ -4,6 +4,7 @@
 :revealjs_controls: false
 :revealjs_hash: true
 :revealjs_theme: league
+:revealjsdir: https://cdn.jsdelivr.net/npm/reveal.js@3.9.2
 :icons: font
 :highlightjs-languages: groovy
 
