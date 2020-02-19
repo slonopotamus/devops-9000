@@ -1,0 +1,7 @@
+= DevOps меня полностью
+
+Sources for tech talk @ Mail.Ru on DevOps, Jenkins and better development approaches.
+
+* link:https://slonopotamus.github.io/devops-9000/presentation.html[Interactive HTML]
+
+* link:https://slonopotamus.github.io/devops-9000/presentation.html?print-pdf[Printable]

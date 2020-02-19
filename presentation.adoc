@@ -60,3 +60,7 @@ pipeline
 * Динамический пул агентов
 
 == Q&A
+
+== Source
+
+link:https://github.com/slonopotamus/devops-9000[github.com/slonopotamus/devops-9000]
