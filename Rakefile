@@ -4,7 +4,9 @@ require 'asciidoctor'
 require 'asciidoctor-revealjs'
 
 task :convert do
-  Asciidoctor.convert_file 'presentation.adoc', backend: 'revealjs'
+  Asciidoctor.convert_file 'presentation.adoc',
+                           backend: 'revealjs',
+                           safe: Asciidoctor::SafeMode::UNSAFE
 end
 
 task default: :convert
