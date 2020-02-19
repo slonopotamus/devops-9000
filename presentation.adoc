@@ -1,5 +1,6 @@
 = DevOps меня полностью
 Марат Радченко <https://github.com/slonopotamus[@slonopotamus]>
+v1.0, 2020-02-26
 :source-highlighter: highlightjs
 :revealjs_controls: false
 :revealjs_hash: true
@@ -10,7 +11,7 @@
 
 Ломаем билды быстро, гибко и безопасно
 
-**2020-02-26**
+**{revdate}**
 
 == Предыстория
 
@@ -36,12 +37,12 @@ A1, S1, T1, D1 - тысячи их
 
 .Разве что-то может пойти не так?
 [source,groovy]
---
+----
 pipeline
 {
     /* insert Declarative Pipeline here */
 }
---
+----
 
 == Проблемы Jenkins
 
