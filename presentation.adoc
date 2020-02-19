@@ -1,17 +1,49 @@
-= Title Slide
+= DevOps 9000: Быстро, гибко, безопасно
+Marat Radchenko <https://github.com/slonopotamus[@slonopotamus]>
+:date: 2020-02-26
+:source-highlighter: highlightjs
+:revealjs_controls: false
+:revealjs_hash: true
+:icons: font
+:highlightjs-languages: groovy
 
-== Slide One
+== Предыстория
 
-* Foo
-* Bar
-* World
+A1, S1, T1, D1 - тысячи их
 
-== Slide Two
+* Программисты :wall: от билд-менеджеров
+* Билд-скрипты внутри Jenkins, нет доступа
+* Тяжеловесные процессы изменений
+* Мутная граница pipeline <> build.bat
+* Влияние веток друг на друга
 
-A Great Story
+== Цели
 
-[.notes]
+* Прозрачность процессов сборки/деплоя
+* Возможность заглянуть внутрь и потыкать палочкой
+* Изоляция веток, безопасные эксперименты
+* Быстрое внесение изменений в билд-процессы
+* Сборка релиза за полчаса
+
+== Пайплайны внутри репозитория игры
+
+.Разве что-то может пойти не так?
+[source,groovy]
 --
-* tell anecdote
-* make a point
+pipeline
+{
+    /* insert Declarative Pipeline here */
+}
 --
+
+== Планы
+
+* Изоляция от окружения на билд-агенте
+* Билд за час
+
+== Мечты
+
+* Другой CI
+* Динамический пул агентов
+
+== Q&A
