@@ -154,6 +154,21 @@ slackSend channel: "#channel-name",
 
 image::images/slack-notifications.png[]
 
+[.columns]
+=== Деплой в полтора клика
+
+[.column]
+image::images/jenkins-deploy.png[]
+
+[.column]
+--
+HTML-форма в описании билда
+
+Запускает джоб деплоя
+
+Можно деплоить *любую* ветку
+--
+
 == Зависимости
 
 [source,groovy]
