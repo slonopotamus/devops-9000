@@ -1,4 +1,4 @@
-= DevOps меня полностью
+= DevOpsь меня полностью
 Марат Радченко <https://github.com/slonopotamus[@slonopotamus]>
 v1.0, 2020-02-26
 :source-highlighter: highlightjs
