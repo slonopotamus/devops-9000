@@ -177,19 +177,37 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build</code></pre></div></div>
 <div class="paragraph"><p>И это тоже <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Оба файла находятся в репозитории с исходниками</p></div></div></section><section id="_игрушечный_пример"><h2>Игрушечный пример!</h2><div class="slide-content"><div class="ulist step"><ul><li class="fragment"><p>Окей, это всего-лишь презентация</p></li><li class="fragment"><p>Игры немного сложнее</p></li><li class="fragment"><p>Да, немного</p></li></ul></div></div></section></section>
-<section id="_предыстория_внутри_allods_team"><h2>Предыстория: внутри Allods Team</h2><div class="slide-content"><div class="paragraph"><p>A1, S1, T1, D1 - тысячи их</p></div>
-<div class="ulist"><ul><li><p>Программисты отдельно от билд-менеджеров</p></li><li><p>Билд-скрипты внутри Jenkins, нет доступа</p></li><li><p>Тяжеловесные процессы изменений</p></li><li><p>"Забор" между pipeline и build.bat</p></li><li><p>Влияние веток друг на друга</p></li></ul></div></div></section>
+<section><section id="_предыстория_allods_team"><h2>Предыстория: Allods Team</h2><div class="slide-content"><div class="ulist"><ul><li><p>A1, F1, S1, T1, D1 - тысячи их</p></li><li><p>Jenkins/TeamCity</p></li><li><p>Отдельная команда DevOps/БМ</p></li></ul></div></div></section><section id="_проблемы"><h2>Проблемы</h2><div class="slide-content"><div class="ulist"><ul><li><p>Программисты отдельно от билд-менеджеров</p></li><li><p>Билд-скрипты внутри Jenkins, нет доступа</p></li><li><p>"Забор" между pipeline и build.bat</p></li><li><p>Влияние веток друг на друга</p></li></ul></div></div></section></section>
 <section id="_предыстория_внешний_мир_open_source" class="columns"><h2>Предыстория: внешний мир (open source)</h2><div class="slide-content"><div class="openblock column"><div class="content"><div class="paragraph"><p>У проекта есть</p></div>
 <div class="ulist"><ul><li><p>Git-репозиторий</p></li><li><p>Issue-tracker</p></li></ul></div></div></div>
 <div class="openblock column"><div class="content"><div class="paragraph"><p>Сторонние сервисы</p></div>
 <div class="ulist"><ul><li><p>Сервис CI</p></li><li><p>Сервис для деплоя</p></li><li><p>Хранилище релизов</p></li><li><p>Вебсайт</p></li></ul></div></div></div></div></section>
-<section id="_цели"><h2>Цели</h2><div class="slide-content"><div class="ulist"><ul><li><p>Прозрачность процессов сборки/деплоя</p></li><li><p>Возможность заглянуть внутрь и потыкать палочкой</p></li><li><p>Изоляция веток, безопасные эксперименты</p></li><li><p>Быстрое внесение изменений в билд-процессы</p></li><li><p>Сборка релиза за полчаса</p></li></ul></div></div></section>
-<section id="_пайплайны_это_просто"><h2>Пайплайны - это просто</h2><div class="slide-content"><div class="listingblock"><div class="title">Разве что-то может пойти не так?</div>
-<div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">pipeline
+<section><section id="_цели"><h2>Цели</h2><div class="slide-content"><div class="ulist"><ul><li><p>Прозрачность процессов сборки/деплоя</p></li><li><p>Возможность заглянуть внутрь и потыкать палочкой</p></li><li><p>Изоляция веток, безопасные эксперименты</p></li><li><p>Быстрое внесение изменений в билд-процессы</p></li><li><p>Сборка релиза за полчаса</p></li></ul></div></div></section><section id="_git_single_source_of_truth"><h2>Git - single source of truth</h2><div class="slide-content"><div class="paragraph"><p>Все скрипты и конфиги хранятся в Git</p></div>
+<div class="paragraph"><p>CI-сервису дан только URL до репозитория</p></div></div></section></section>
+<section><section id="_пайплайны_это_просто"><h2>Пайплайны - это просто</h2><div class="slide-content"><div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">pipeline
 {
     /* insert Declarative Pipeline here */
-}</code></pre></div></div></div></section>
-<section id="_проблемы_jenkins"><h2>Проблемы Jenkins</h2><div class="slide-content"><div class="ulist"><ul><li><p>Нет локальной проверки</p></li><li><p>Весь функционал в плагинах, которые system-wide</p></li><li><p>Нужны админские права даже чтобы создать джоб</p></li><li><p>Чудовищный UI/UX</p></li></ul></div></div></section>
+}</code></pre></div></div></div></section><section id="_пайплайны_это_просто_2"><h2>Пайплайны - это просто</h2><div class="slide-content"><div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                sh 'build.sh'
+            }
+        }
+    }
+}</code></pre></div></div></div></section><section id="_storage_для_файлов"><h2>Storage для файлов</h2><div class="slide-content"><div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">pipeline {
+// ...
+
+    stage("Store artifacts") {
+        always {
+            archiveArtifacts artifacts: 'build/*.exe' <i class="conum" data-value="1"></i><b>(1)</b>
+        }
+    }
+}</code></pre></div></div>
+<div class="colist arabic"><table><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Не более 100MB</td></tr></table></div></div></section><section id="_нотификации_в_slack"><h2>Нотификации в Slack</h2><div class="slide-content"><div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">slackSend channel: "#channel-name",
+          message: "Build Failed: ${JOB_NAME} ${env.BUILD_NUMBER}"</code></pre></div></div></div></section></section>
+<section id="_jenkins"><h2>Jenkins</h2><div class="slide-content"><div class="ulist"><ul><li><p>Нет локальной проверки</p></li><li><p>Весь функционал в плагинах, которые system-wide</p></li><li><p>Нужны админские права даже чтобы создать джоб</p></li><li><p>Чудовищный UI/UX</p></li></ul></div></div></section>
 <section id="_планы_мечты"><h2>Планы &amp; мечты</h2><div class="slide-content"><div class="ulist"><ul><li><p>Изоляция от окружения на билд-агенте</p></li><li><p>Билд менее чем за час</p></li><li><p>Создание тест-стендов одной кнопкой</p></li><li><p>Автоматический деплой билда на клиенты</p></li><li><p>Более другой CI-сервис</p></li><li><p>Динамический пул агентов</p></li></ul></div></div></section>
 <section id="_qa"><h2>Q&amp;A</h2></section>
 <section id="_source"><h2>Source</h2><div class="slide-content"><div class="paragraph"><p><a href="https://github.com/slonopotamus/devops-9000">github.com/slonopotamus/devops-9000</a></p></div></div></section></div></div><script src="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/js/reveal.js"></script><script>Array.prototype.slice.call(document.querySelectorAll('.slides section')).forEach(function(slide) {
