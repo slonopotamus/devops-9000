@@ -217,8 +217,8 @@ image::images/parallel-build.png[]
 * Более другой CI-сервис
 * Динамический пул агентов
 
-== Q&A
+== Вопросы?
 
-== Source
+image::images/qrcode.svg[]
 
 link:https://github.com/slonopotamus/devops-9000[github.com/slonopotamus/devops-9000]
