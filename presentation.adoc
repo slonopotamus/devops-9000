@@ -53,13 +53,16 @@ include::.github/workflows/ci.yml[]
 * Игры немного сложнее
 * Да, немного
 
-== Предыстория: внутри Allods Team
+== Предыстория: Allods Team
 
-A1, S1, T1, D1 - тысячи их
+* A1, F1, S1, T1, D1 - тысячи их
+* Jenkins/TeamCity
+* Отдельная команда DevOps/БМ
+
+=== Проблемы
 
 * Программисты отдельно от билд-менеджеров
 * Билд-скрипты внутри Jenkins, нет доступа
-* Тяжеловесные процессы изменений
 * "Забор" между pipeline и build.bat
 * Влияние веток друг на друга
 
@@ -92,9 +95,14 @@ A1, S1, T1, D1 - тысячи их
 * Быстрое внесение изменений в билд-процессы
 * Сборка релиза за полчаса
 
+=== Git - single source of truth
+
+Все скрипты и конфиги хранятся в Git
+
+CI-сервису дан только URL до репозитория
+
 == Пайплайны - это просто
 
-.Разве что-то может пойти не так?
 [source,groovy]
 ----
 pipeline
@@ -103,7 +111,47 @@ pipeline
 }
 ----
 
-== Проблемы Jenkins
+=== Пайплайны - это просто
+
+[source,groovy]
+----
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                sh 'build.sh'
+            }
+        }
+    }
+}
+----
+
+=== Storage для файлов
+
+[source,groovy]
+----
+pipeline {
+// ...
+
+    stage("Store artifacts") {
+        always {
+            archiveArtifacts artifacts: 'build/*.exe' // <1>
+        }
+    }
+}
+----
+<1> Не более 100MB
+
+=== Нотификации в Slack
+
+[source,groovy]
+----
+slackSend channel: "#channel-name",
+          message: "Build Failed: ${JOB_NAME} ${env.BUILD_NUMBER}"
+----
+
+== Jenkins
 
 * Нет локальной проверки
 * Весь функционал в плагинах, которые system-wide
