@@ -145,11 +145,46 @@ link.type = 'text/css';
 link.href = window.location.search.match( /print-pdf/gi ) ? "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/print/pdf.css" : "https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/print/paper.css";
 document.getElementsByTagName( 'head' )[0].appendChild( link );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>DevOps меня полностью</h1><div class="preamble"><div class="paragraph"><p>Ломаем билды быстро, гибко и безопасно</p></div>
 <div class="paragraph"><p><strong>2020-02-26</strong></p></div></div><p class="author"><small>Марат Радченко</small></p></section>
-<section id="_предыстория"><h2>Предыстория</h2><div class="slide-content"><div class="paragraph"><p>A1, S1, T1, D1 - тысячи их</p></div>
+<section><section><div class="slide-content"><div class="paragraph"><p>Эта презентация автоматически компилируется из текстового файла и деплоится в эти ваши интернеты когда я делаю <code>git push</code></p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>У неё нет билд-менеджера, нет билд-агентов, нет десятков вики-страниц с инструкцией по установке</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Есть условный <code>build.bat</code></p></div>
+<div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="ruby" class="language-ruby hljs" data-noescape="true"># frozen_string_literal: true
+
+require 'asciidoctor'
+require 'asciidoctor-revealjs'
+
+task :convert do
+  Asciidoctor.convert_file 'presentation.adoc',
+                           backend: 'revealjs',
+                           safe: Asciidoctor::SafeMode::UNSAFE,
+                           to_dir: 'build',
+                           mkdirs: true
+end
+
+task default: :convert</code></pre></div></div>
+<div class="paragraph"><p>Это <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>И условный <code>Jenkinsfile</code></p></div>
+<div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs" data-noescape="true">on:
+  push:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+      - run: bundle install
+      - run: bundle exec rake
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build</code></pre></div></div>
+<div class="paragraph"><p>И это тоже <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Оба файла находятся в репозитории с исходниками</p></div></div></section><section id="_игрушечный_пример"><h2>Игрушечный пример!</h2><div class="slide-content"><div class="ulist step"><ul><li class="fragment"><p>Окей, это всего-лишь презентация</p></li><li class="fragment"><p>Игры немного сложнее</p></li><li class="fragment"><p>Да, немного</p></li></ul></div></div></section></section>
+<section id="_предыстория_внутри_allods_team"><h2>Предыстория: внутри Allods Team</h2><div class="slide-content"><div class="paragraph"><p>A1, S1, T1, D1 - тысячи их</p></div>
 <div class="ulist"><ul><li><p>Программисты отдельно от билд-менеджеров</p></li><li><p>Билд-скрипты внутри Jenkins, нет доступа</p></li><li><p>Тяжеловесные процессы изменений</p></li><li><p>"Забор" между pipeline и build.bat</p></li><li><p>Влияние веток друг на друга</p></li></ul></div></div></section>
-<section id="_open_source"><h2>Open source</h2></section>
+<section id="_предыстория_внешний_мир_open_source" class="columns"><h2>Предыстория: внешний мир (open source)</h2><div class="slide-content"><div class="openblock column"><div class="content"><div class="paragraph"><p>У проекта есть</p></div>
+<div class="ulist"><ul><li><p>Git-репозиторий</p></li><li><p>Issue-tracker</p></li></ul></div></div></div>
+<div class="openblock column"><div class="content"><div class="paragraph"><p>Сторонние сервисы</p></div>
+<div class="ulist"><ul><li><p>Сервис CI</p></li><li><p>Сервис для деплоя</p></li><li><p>Хранилище релизов</p></li><li><p>Вебсайт</p></li></ul></div></div></div></div></section>
 <section id="_цели"><h2>Цели</h2><div class="slide-content"><div class="ulist"><ul><li><p>Прозрачность процессов сборки/деплоя</p></li><li><p>Возможность заглянуть внутрь и потыкать палочкой</p></li><li><p>Изоляция веток, безопасные эксперименты</p></li><li><p>Быстрое внесение изменений в билд-процессы</p></li><li><p>Сборка релиза за полчаса</p></li></ul></div></div></section>
-<section id="_пайплайны_внутри_репозитория_игры"><h2>Пайплайны внутри репозитория игры</h2><div class="slide-content"><div class="listingblock"><div class="title">Разве что-то может пойти не так?</div>
+<section id="_пайплайны_это_просто"><h2>Пайплайны - это просто</h2><div class="slide-content"><div class="listingblock"><div class="title">Разве что-то может пойти не так?</div>
 <div class="content"><pre class="highlightjs highlight"><code data-lang="groovy" class="language-groovy hljs" data-noescape="true">pipeline
 {
     /* insert Declarative Pipeline here */
@@ -173,7 +208,7 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );</script></head><
 // - https://github.com/hakimel/reveal.js#dependencies
 Reveal.initialize({
   // Display presentation control arrows
-  controls: false,
+  controls: true,
   // Help the user learn the controls by providing hints, for example by
   // bouncing the down arrow when they first encounter a vertical slide
   controlsTutorial: true,
