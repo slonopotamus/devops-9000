@@ -148,7 +148,7 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );</script></head><
 <section><section><div class="slide-content"><div class="paragraph"><p>Эта презентация автоматически компилируется из текстового файла и деплоится в эти ваши интернеты когда я делаю <code>git push</code></p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>У неё нет билд-менеджера, нет билд-агентов, нет десятков вики-страниц с инструкцией по установке</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Есть условный <code>build.bat</code></p></div>
 <div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="ruby" class="language-ruby hljs" data-noescape="true"># frozen_string_literal: true
 
-require 'asciidoctor'
+require 'asciidoctor-diagram'
 require 'asciidoctor-revealjs'
 
 task :convert do
