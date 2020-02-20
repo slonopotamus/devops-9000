@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'asciidoctor'
+require 'asciidoctor-diagram'
 require 'asciidoctor-revealjs'
 
 task :convert do
