@@ -7,6 +7,7 @@ v1.0, 2020-02-26
 :revealjsdir: https://cdn.jsdelivr.net/npm/reveal.js@3.9.2
 :icons: font
 :highlightjs-languages: groovy
+:data-uri:
 
 Ломаем билды быстро, гибко и безопасно
 
@@ -141,15 +142,47 @@ pipeline {
     }
 }
 ----
-<1> Не более 100MB
+<1> Не более 100MB icon:sad-tear[]
 
 === Нотификации в Slack
 
 [source,groovy]
 ----
 slackSend channel: "#channel-name",
-          message: "Build Failed: ${JOB_NAME} ${env.BUILD_NUMBER}"
+          message: "☠ Build Failed: ${JOB_NAME} ${env.BUILD_NUMBER}"
 ----
+
+== Зависимости
+
+[source,groovy]
+----
+def buildPackage(binary, paks) {
+  waitUntil {
+    finishedArtifacts.contains(binary) && // <1>
+    finishedArtifacts.contains(paks) // <2>
+  }
+
+  // Билдим пэкедж
+}
+----
+<1> Ждём когда сбилдится EXE
+<2> Ждём когда сбилдятся паки с данными
+
+NOTE: Одни и те же паки используются в нескольких пэкеджах
+
+[.columns.is-vcentered]
+=== !
+
+// TODO: suppress list markers
+[.column]
+--
+[.step]
+* Выглядит оно так себе
+* Зато быстро работает!
+--
+
+[.column]
+image::images/parallel-build.png[]
 
 == Jenkins
 
