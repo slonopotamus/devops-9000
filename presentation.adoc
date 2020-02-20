@@ -149,8 +149,10 @@ pipeline {
 [source,groovy]
 ----
 slackSend channel: "#channel-name",
-          message: "☠ Build Failed: ${JOB_NAME} ${env.BUILD_NUMBER}"
+          message: "☠ ${BRANCH_NAME} #${BUILD_NUMBER} failed"
 ----
+
+image::images/slack-notifications.png[]
 
 == Зависимости
 
