@@ -72,20 +72,16 @@ include::.github/workflows/ci.yml[]
 
 [.column]
 --
-У проекта есть
-
-* Git-репозиторий
-* Issue-tracker
+* Git-репозиторий + issue-tracker
+* CI
+* Cloud
 --
 
 [.column]
 --
-Сторонние сервисы
-
-* Сервис CI
-* Сервис для деплоя
 * Хранилище релизов
 * Вебсайт
+* Другая экзотика
 --
 
 == Цели
@@ -96,7 +92,7 @@ include::.github/workflows/ci.yml[]
 * Быстрое внесение изменений в билд-процессы
 * Сборка релиза за полчаса
 
-=== Git - single source of truth
+== Git - single source of truth
 
 Все скрипты и конфиги хранятся в Git
 
