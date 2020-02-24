@@ -23,7 +23,7 @@ v1.0, 2020-02-26
 
 === !
 
-Есть условный `build.bat`
+Есть "build.bat"
 
 [source,ruby]
 ----
@@ -34,7 +34,7 @@ include::Rakefile[]
 
 === !
 
-И условный `Jenkinsfile`
+И есть "pipeline"
 
 [source,yaml]
 ----
@@ -45,44 +45,27 @@ include::.github/workflows/ci.yml[]
 
 === !
 
-Оба файла находятся в репозитории с исходниками
+IMPORTANT: Оба файла находятся в репозитории с исходниками
 
-=== Игрушечный пример!
+=== !
 
-[.step]
-* Окей, это всего-лишь презентация
-* Игры немного сложнее
-* Да, немного
+Окей, игры устроены немного сложнее
 
-== Предыстория: Allods Team
+== Allods Team
 
 * A1, F1, S1, T1, D1 - тысячи их
-* Jenkins/TeamCity
-* Отдельная команда DevOps/БМ
+* TeamCity/Jenkins
+* Программисты делают "build.bat"
+* БМы делают "pipeline"
 
-=== Проблемы
+=== !
 
-* Программисты отдельно от билд-менеджеров
-* Билд-скрипты внутри Jenkins, нет доступа
-* "Забор" между pipeline и build.bat
+* Pipeline внутри CI, нет доступа
+* "API" между pipeline и build.bat
 * Влияние веток друг на друга
+* Сложный сетап агентов
 
-[.columns]
-== Предыстория: внешний мир (open source)
-
-[.column]
---
-* Git-репозиторий + issue-tracker
-* CI
-* Cloud
---
-
-[.column]
---
-* Хранилище релизов
-* Вебсайт
-* Другая экзотика
---
+=== А можно как-то иначе?
 
 == Цели
 
@@ -90,16 +73,16 @@ include::.github/workflows/ci.yml[]
 * Возможность заглянуть внутрь и потыкать палочкой
 * Изоляция веток, безопасные эксперименты
 * Быстрое внесение изменений в билд-процессы
-* Сборка релиза за полчаса
 
 == Git - single source of truth
 
 Все скрипты и конфиги хранятся в Git
 
-CI-сервису дан только URL до репозитория
+У проекта _нет_ другого места для хранения "первичных" данных
 
 == Пайплайны - это просто
 
+.Jenkinsfile
 [source,groovy]
 ----
 pipeline
@@ -124,23 +107,39 @@ pipeline {
 }
 ----
 
-=== Storage для файлов
+=== Что может пойти не так?
+
+=== Всё
+
+== Checkout
+
+* Сотни гигабайт
+* Долго
+* Кончается место на агентах
+* Jenkins не чистит
+
+== Хранилище для файлов
 
 [source,groovy]
 ----
 pipeline {
 // ...
 
-    stage("Store artifacts") {
-        always {
-            archiveArtifacts artifacts: 'build/*.exe' // <1>
+    stage("store artifacts") {
+        steps {
+            archiveArtifacts artifacts: 'build/*' // <1>
         }
     }
 }
 ----
 <1> Не более 100MB icon:sad-tear[]
 
-=== Нотификации в Slack
+=== Хранилище для файлов
+
+* rsync/FTP
+* Скрипты по очистке
+
+== Чат-нотификации
 
 [source,groovy]
 ----
@@ -150,8 +149,10 @@ slackSend channel: "#channel-name",
 
 image::images/slack-notifications.png[]
 
+Jenkins не умеет в приватные сообщения icon:sad-tear[]
+
 [.columns]
-=== Деплой в полтора клика
+== Деплой в полтора клика
 
 [.column]
 image::images/jenkins-deploy.png[]
@@ -165,7 +166,63 @@ HTML-форма в описании билда
 Можно деплоить *любую* ветку
 --
 
-== Зависимости
+== Как билдить быстро?
+
+* Не делать лишнего
+* Выполнять в параллель независимые задачи
+* Ускорять "critical path"
+
+=== Let's go wide
+
+[plantuml]
+....
+@startuml
+
+skinparam activity {
+  BackgroundColor<< Paks >> Yellow
+  BackgroundColor<< Bins >> Green
+  BackgroundColor<< Package >> Cyan
+  BackgroundColor<< Linux >> Brown
+}
+
+(*) --> ===B1===
+===B1=== --> "Cook Paks" << Paks >>
+===B1=== --> "PS4 Profile Bins" << Bins >>
+===B1=== --> "PS4 Release Bins" << Bins >>
+===B1=== --> "XBox Profile Bins" << Bins >>
+===B1=== --> "XBox Release Bins" << Bins >>
+===B1=== --> "x64 Bins" << Bins >>
+===B1=== --> "Switch Bins" << Bins >>
+===B1=== --> "Tests"
+===B1=== --> "Data Checks"
+"Cook Paks" --> "PS4 Profile Package" << Package >>
+"Cook Paks" --> "PS4 Release Package" << Package >>
+"Cook Paks" --> "XBox Profile Package" << Package >>
+"Cook Paks" --> "XBox Release Package" << Package >>
+"Cook Paks" --> "Linux" << Linux >>
+"PS4 Profile Bins" --> "PS4 Profile Package" << Package >>
+"PS4 Release Bins" --> "PS4 Release Package" << Package >>
+"XBox Profile Bins" --> "XBox Profile Package" << Package >>
+"XBox Release Bins" --> "XBox Release Package" << Package >>
+"PS4 Profile Package" --> ===B2===
+"PS4 Release Package" --> ===B2===
+"XBox Profile Package" --> ===B2===
+"XBox Release Package" --> ===B2===
+"Linux" --> ===B2===
+"Tests" --> ===B2===
+"Data Checks" --> ===B2===
+"x64 Bins" --> ===B2===
+"Switch Bins" --> ===B2===
+===B2=== --> (*)
+
+@enduml
+....
+
+=== !
+
+icon:poop[] Jenkins так не умеет
+
+=== Костыли приходят на помощь
 
 [source,groovy]
 ----
@@ -181,17 +238,14 @@ def buildPackage(binary, paks) {
 <1> Ждём когда сбилдится EXE
 <2> Ждём когда сбилдятся паки с данными
 
-NOTE: Одни и те же паки используются в нескольких пэкеджах
-
 [.columns.is-vcentered]
 === !
 
-// TODO: suppress list markers
 [.column]
 --
-[.step]
-* Выглядит оно так себе
-* Зато быстро работает!
+Выглядит оно так себе
+
+Но работает
 --
 
 [.column]
