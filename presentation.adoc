@@ -374,7 +374,9 @@ Cloud Mail.Ru?
 
 === Динамический пул агентов
 
-=== Более другой CI-сервис
+=== !
+
+*Более другой CI*
 
 https://drone.io/[Drone.io]? https://docs.gitlab.com/ce/ci/[GitLab CI/CD]? icon:bicycle[]?
 
