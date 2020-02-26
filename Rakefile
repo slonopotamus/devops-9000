@@ -2,14 +2,12 @@
 
 require 'asciidoctor-diagram'
 require 'asciidoctor-revealjs'
-require 'rake/clean'
 
 task :default do
-  FileUtils.cp_r 'images', 'build'
   Asciidoctor.convert_file 'presentation.adoc',
                            backend: 'revealjs',
                            safe: Asciidoctor::SafeMode::UNSAFE,
-                           to_dir: 'build'
+                           to_dir: 'build',
+                           mkdirs: true
+  FileUtils.cp_r 'images', 'build'
 end
-
-CLEAN.include 'build'
