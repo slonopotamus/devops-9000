@@ -150,17 +150,15 @@ document.getElementsByTagName( 'head' )[0].appendChild( link );</script></head><
 
 require 'asciidoctor-diagram'
 require 'asciidoctor-revealjs'
-require 'rake/clean'
 
 task :default do
-  FileUtils.cp_r 'images', 'build'
   Asciidoctor.convert_file 'presentation.adoc',
                            backend: 'revealjs',
                            safe: Asciidoctor::SafeMode::UNSAFE,
-                           to_dir: 'build'
-end
-
-CLEAN.include 'build'</code></pre></div></div>
+                           to_dir: 'build',
+                           mkdirs: true
+  FileUtils.cp_r 'images', 'build'
+end</code></pre></div></div>
 <div class="paragraph"><p>Это <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="paragraph"><p>И есть "pipeline"</p></div>
 <div class="listingblock"><div class="content"><pre class="highlightjs highlight"><code data-lang="yaml" class="language-yaml hljs" data-noescape="true">on:
   push:
@@ -177,7 +175,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build</code></pre></div></div>
-<div class="paragraph"><p>И это тоже <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="admonitionblock important"><table><tr><td class="icon"><i class="fa fa-exclamation-circle" title="Important"></i></td><td class="content">Оба файла находятся в репозитории с исходниками</td></tr></table></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Окей, игры устроены немного сложнее</p></div></div></section></section>
+<div class="paragraph"><p>И это тоже <em>весь</em> файл</p></div></div></section><section><div class="slide-content"><div class="admonitionblock important"><table><tr><td class="icon"><i class="fa fa-exclamation-circle" title="Important"></i></td><td class="content">Оба файла находятся в репозитории с исходниками</td></tr></table></div></div></section><section id="_continuous_integration"><h2>Continuous integration</h2><div class="slide-content"><div class="imageblock" style=""><img src="images/gh-actions.png" alt="gh actions"></div></div></section><section><div class="slide-content"><div class="paragraph"><p>Окей, игры устроены немного сложнее</p></div></div></section></section>
 <section><section id="_allods_team"><h2>Allods Team</h2><div class="slide-content"><div class="ulist"><ul><li><p>A1, F1, S1, T1, D1 - тысячи их</p></li><li><p>TeamCity/Jenkins</p></li><li><p>Программисты делают "build.bat"</p></li><li><p>БМы делают "pipeline"</p></li></ul></div></div></section><section id="_и_в_чём_проблема"><h2>И в чём проблема?</h2><div class="slide-content"><div class="ulist"><ul><li><p>Pipeline внутри CI, нет доступа</p></li><li><p>"API" между pipeline и build.bat</p></li><li><p>Влияние веток друг на друга</p></li><li><p>Сложный сетап агентов</p></li></ul></div></div></section><section id="_а_можно_как_то_иначе"><h2>А можно как-то иначе?</h2></section></section>
 <section id="_цели"><h2>Цели</h2><div class="slide-content"><div class="ulist"><ul><li><p>Прозрачность процессов сборки/деплоя</p></li><li><p>Изоляция веток, безопасные эксперименты</p></li><li><p>Быстрое внесение изменений в билд-процессы</p></li><li><p>Code review для пайплайнов</p></li></ul></div></div></section>
 <section id="_git_single_source_of_truth"><h2>Git - single source of truth</h2><div class="slide-content"><div class="paragraph"><p>Все скрипты и конфиги хранятся в Git</p></div>
