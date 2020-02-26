@@ -7,6 +7,7 @@ v1.0, 2020-02-26
 :revealjsdir: https://cdn.jsdelivr.net/npm/reveal.js@3.9.2
 :icons: font
 :highlightjs-languages: groovy
+:imagesdir: images
 
 Ломаем билды быстро, гибко и безопасно
 
@@ -49,7 +50,7 @@ IMPORTANT: Оба файла находятся в репозитории с и�
 
 === Continuous integration
 
-image::images/gh-actions.png[]
+image::gh-actions.png[]
 
 === !
 
@@ -116,7 +117,7 @@ pipeline {
 
 В каждой ветке свой `Jenkinsfile` => можно безопасно экспериментировать с процессом сборки
 
-image::images/multibranch.png[]
+image::multibranch.png[]
 
 Джобы создаются и удаляются автоматически вместе с веткой
 
@@ -192,7 +193,7 @@ slackSend channel: "#channel-name",
           message: "☠ ${BRANCH_NAME} #${BUILD_NUMBER} failed"
 ----
 
-image::images/slack-notifications.png[]
+image::slack-notifications.png[]
 
 [.fragment]
 --
@@ -287,13 +288,13 @@ def buildPackage(binary, paks) {
 --
 
 [.column]
-image::images/parallel-build.png[]
+image::parallel-build.png[]
 
 [.columns]
 == Деплой в полтора клика
 
 [.column]
-image::images/jenkins-deploy.png[]
+image::jenkins-deploy.png[]
 
 [.column]
 --
@@ -356,7 +357,7 @@ pipeline {
 
 === Blue Ocean
 
-image::images/multibranch-bluocean.png[]
+image::multibranch-bluocean.png[]
 
 * Проще увидеть "какой шаг упал"
 * Сложнее или никак всё остальное
@@ -383,6 +384,6 @@ https://drone.io/[Drone.io]? https://docs.gitlab.com/ce/ci/[GitLab CI/CD]? icon:
 
 == The End
 
-image::images/qrcode.svg[]
+image::qrcode.svg[]
 
 link:https://github.com/slonopotamus/devops-9000[github.com/slonopotamus/devops-9000]
