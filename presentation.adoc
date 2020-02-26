@@ -7,7 +7,6 @@ v1.0, 2020-02-26
 :revealjsdir: https://cdn.jsdelivr.net/npm/reveal.js@3.9.2
 :icons: font
 :highlightjs-languages: groovy
-:data-uri:
 
 Ломаем билды быстро, гибко и безопасно
 
