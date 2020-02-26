@@ -47,6 +47,10 @@ include::.github/workflows/ci.yml[]
 
 IMPORTANT: Оба файла находятся в репозитории с исходниками
 
+=== Continuous integration
+
+image::images/gh-actions.png[]
+
 === !
 
 Окей, игры устроены немного сложнее
