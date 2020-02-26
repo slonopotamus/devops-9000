@@ -1,15 +1,15 @@
 on:
   push:
-    branches: [master]
+    branches: [master]                          # trigger
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest                      # build-agent
     steps:
-      - run: sudo apt-get install graphviz
-      - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@v1
-      - run: bundle install && bundle exec rake
-      - uses: peaceiris/actions-gh-pages@v3
+      - run: sudo apt-get install graphviz      # dependencies
+      - uses: ruby/setup-ruby@v1                # more dependencies
+      - uses: actions/checkout@v2               # checkout
+      - run: bundle install && bundle exec rake # build
+      - uses: peaceiris/actions-gh-pages@v3     # publish
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
