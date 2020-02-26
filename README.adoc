@@ -1,4 +1,4 @@
-= DevOps меня полностью
+= DevOpsь меня полностью
 
 Sources for tech talk @ Mail.Ru on DevOps, Jenkins and better development practices.
 
