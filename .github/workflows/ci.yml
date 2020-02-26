@@ -5,9 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-latest                      # build-agent
     steps:
+      - uses: actions/checkout@v2               # checkout
       - run: sudo apt-get install graphviz      # dependencies
       - uses: ruby/setup-ruby@v1                # more dependencies
-      - uses: actions/checkout@v2               # checkout
       - run: bundle install && bundle exec rake # build
       - uses: peaceiris/actions-gh-pages@v3     # publish
         with:
